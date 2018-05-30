@@ -12,16 +12,15 @@ var calculadora={
 	//if operador sumarestadivmult
 	pulsar: function (event){
 		let value= event.target.value;
+		let quitaracumulado=event.target.value;
 		switch(value){
 			case "/":
 			case "*":
 			case "-":
 			case "+":
 				calculadora.operador=value;
-				calculadora.acumulado=calculadora.pantalla.value;
 				calculadora.contador=1;
 			case "=":
-			console.log(calculadora.paso);
 				if (calculadora.paso){
 					switch(calculadora.operador){
 						case "/":
@@ -39,12 +38,16 @@ var calculadora={
 						calculadora.acumulado=parseFloat(calculadora.acumulado)+parseFloat(calculadora.pantalla.value);
 						break;
 					}
+				}else{
+					calculadora.acumulado=calculadora.pantalla.value;
 				}
-				calculadora.operador=value;
 				calculadora.pantalla.value=calculadora.acumulado;
+				calculadora.operador=value;
+				if (quitaracumulado=='=') {
+					calculadora.acumulado=0;
+				}
 				calculadora.paso=true;
-				console.log(calculadora.paso);
-				break
+				break;
 			case "%":
 				if (calculadora.acumulado===0) calculadora.acumulado=1;
 				calculadora.pantalla.value=(parseFloat(calculadora.acumulado)*parseFloat(calculadora.pantalla.value)/100);
@@ -73,9 +76,7 @@ var calculadora={
 				}
 				break;
 			case ".":
-				if(calculadora.pantalla.value.indexOf('.')<0){
-					calculadora.pantalla.value+=value;
-				}
+				if(calculadora.pantalla.value.indexOf('.')<0) calculadora.pantalla.value+=value; 
 				break;
 			default:
 				if (calculadora.acumulado!=0 && calculadora.contador===1){
@@ -85,6 +86,7 @@ var calculadora={
 					calculadora.pantalla.value=value;
 				}else if (calculadora.operador==='='){
 					calculadora.pantalla.value=value;
+					calculadora.operador="";
 				}else {
 					calculadora.pantalla.value+=value;
 				}
